@@ -1,10 +1,10 @@
-// Code provided by the instructor
+// Code provided by the instructor plus the in order check.
 use std::io;
 use std::io::Write;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 // Prompt the user for an i32.
-fn get_i32(prompt: &str) -> i32 {
+pub(crate) fn get_i32(prompt: &str) -> i32 {
     print!("{prompt}");
     io::stdout().flush().unwrap();
 
@@ -51,8 +51,8 @@ impl Prng {
     fn next_f64(&mut self) -> f64 {
         let f = self.next_u32() as f64;
         return f / (2147483647.0 + 1.0);
-    }
 
+    }
     // Return a pseudorandom value in the range [min, max).
     fn next_i32(&mut self, min: i32, max: i32) -> i32 {
         let range = (max - min) as f64;
@@ -62,7 +62,7 @@ impl Prng {
 }
 
 // Make a vector of random i32 values in the range [0 and max).
-fn make_random_vec(num_items: i32, max: i32) -> Vec<i32> {
+pub(crate) fn make_random_vec(num_items: i32, max: i32) -> Vec<i32> {
     // Prepare a Prng.
     let mut prng = Prng::new();
 
@@ -74,11 +74,14 @@ fn make_random_vec(num_items: i32, max: i32) -> Vec<i32> {
 }
 
 // Print at most num_items items.
-fn print_vec(vec: &Vec<i32>, num_items: i32) {
-    let mut max = vec.len();
-    if max > num_items as usize {
-        max = num_items as usize;
-    }
+pub(crate) fn print_vec(vec: &Vec<i32>, num_items: i32) {
+    // modified to indicate if whole vector is not printed
+    let bigger = vec.len() > num_items as usize;
+    let max = if bigger {
+        num_items as usize
+    } else {
+        vec.len()
+    };
 
     let mut string = String::new();
     string.push_str("[");
@@ -91,6 +94,81 @@ fn print_vec(vec: &Vec<i32>, num_items: i32) {
         string.push_str(" ");
         string.push_str(&vec[i].to_string());
     }
-    string.push_str("]");
+
+    if bigger {
+        string.push_str(" ... ]");
+    } else {
+        string.push_str("]");
+    }
+
     println!("{string}");
+}
+
+
+// separate so the sorting check can be tested.
+fn is_sorted(vec: &Vec<i32>) -> bool {
+    let mut sorted: bool = true;
+
+    for i in 1usize..vec.len() {
+        if vec[i] < vec[i  - 1usize] {
+            sorted = false;
+            break;
+        }
+    }
+
+    sorted
+}
+
+
+// prints a message if the vector is sorted or not. Vector is sorted
+// when values are smallest to largest starting with index 0.
+pub(crate) fn check_sorted(vec: &Vec<i32>) {
+
+    if is_sorted(&vec) {
+        print!("The vector is sorted!");
+    } else {
+        print!("The vector is NOT sorted!");
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::is_sorted;
+
+    #[test]
+    fn test_in_order() {
+        let sample_vec = vec![0, 1, 2, 3, 4];
+        assert!(is_sorted(&sample_vec));
+    }
+
+    #[test]
+    fn test_in_order_dup_value() {
+        let sample_vec = vec![0, 1, 2, 2, 4];
+        assert!(is_sorted(&sample_vec));
+    }
+
+    #[test]
+    fn test_all_same() {
+        let sample_vec = vec![1, 1, 1, 1, 1];
+        assert!(is_sorted(&sample_vec));
+    }
+
+    #[test]
+    fn test_fail_mid() {
+        let sample_vec = vec![0, 1, 3, 2, 4];
+        assert!(is_sorted(&sample_vec) == false);
+    }
+
+    #[test]
+    fn test_fail_left() {
+        let sample_vec = vec![3, 1, 2, 2, 4];
+        assert!(is_sorted(&sample_vec) == false);
+    }
+
+    #[test]
+    fn test_fail_right() {
+        let sample_vec = vec![0, 1, 2, 4, 3];
+        assert!(is_sorted(&sample_vec) == false);
+    }
 }
