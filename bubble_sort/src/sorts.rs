@@ -47,7 +47,7 @@ pub(crate) fn bubble_sort(vec: &mut Vec<i32>) {
         sorting = bubble_up(vec);
         pass_cnt = pass_cnt + 1u32;
     }
-    print!("Bubble pass count: {}\n", pass_cnt);
+    println!("Bubble pass count: {pass_cnt}");
 }
 
 
@@ -61,8 +61,9 @@ pub(crate) fn cocktail_sort(vec: &mut Vec<i32>) {
         sorting = bubble_up(vec);
         if sorting {
             sorting = bubble_down(vec);
+            pass_cnt = pass_cnt + 1u32;
         }
         pass_cnt = pass_cnt + 1u32;
     }
-    print!("cocktail pass count: {}\n", pass_cnt);
+    println!("cocktail pass count: {pass_cnt}");
 }

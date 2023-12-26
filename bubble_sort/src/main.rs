@@ -9,19 +9,19 @@ fn main() {
         let mut bubble_vec = support::make_random_vec(num_items, max);
         let mut cocktail_vec = bubble_vec.clone();
 
-        print!("\nBubble sort pass...\n");
+        println!("\nBubble sort pass...");
         support::print_vec(&bubble_vec, 30i32);
         sorts::bubble_sort(&mut bubble_vec);
         support::print_vec(&bubble_vec, 30i32);
         support::check_sorted(&bubble_vec);
 
-        print!("\n\nCocktail shaker sort pass\n");
+        println!("\n\nCocktail shaker sort pass");
         support::print_vec(&cocktail_vec, 30i32);
         sorts::cocktail_sort(&mut cocktail_vec);
         support::print_vec(&cocktail_vec, 30i32);
         support::check_sorted(&cocktail_vec);
 
     } else {
-        print!("Vector size ({}) has to be greater than zero", num_items);
+        println!("Vector size ({}) has to be greater than zero", num_items);
     }
 }
