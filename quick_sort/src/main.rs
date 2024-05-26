@@ -9,7 +9,7 @@ fn main() {
         let mut vec = support::make_random_vec(num_items, max);
 
         support::print_vec(&vec, 30i32);
-        //
+        sorts::quicksort(&mut vec);
         support::print_vec(&vec, 30i32);
         support::check_sorted(&vec);
 
