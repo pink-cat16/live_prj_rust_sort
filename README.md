@@ -1,4 +1,6 @@
-# Algorithms with Rust: Sorting and Searching.
+# live_prj_rust_sort
+
+These are my solutions to the excersizes in "Algorithms with Rust: Sorting and Searching".
 
 ## Bubble sort
 
